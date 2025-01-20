@@ -1,5 +1,5 @@
 # Use an official OpenJDK image with GlassFish
-FROM glassfish:4.1-jdk11
+FROM glassfish:5.1-jdk11
 
 # Remove default web applications (if needed)
 RUN rm -rf /opt/glassfish4/glassfish/domains/domain1/autodeploy/*
