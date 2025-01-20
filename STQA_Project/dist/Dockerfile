@@ -1,24 +1,14 @@
-# Use the official OpenJDK 8 image as the base image
-FROM openjdk:8-jdk-alpine
+# Use an official OpenJDK image with GlassFish
+FROM glassfish:4.1-jdk11
 
-# Set the working directory inside the container
-WORKDIR /opt
+# Remove default web applications (if needed)
+RUN rm -rf /opt/glassfish4/glassfish/domains/domain1/autodeploy/*
 
-# Install GlassFish 4.1
-RUN apk --no-cache add curl bash && \
-    curl -L https://github.com/javaee/glassfish/releases/download/glassfish-4.1.2/glassfish-4.1.2.zip -o glassfish-4.1.2.zip && \
-    unzip glassfish-4.1.2.zip && \
-    rm glassfish-4.1.2.zip
+# Copy WAR file into GlassFish’s autodeploy directory
+COPY STQA_Project/dist/STQA_Project.war /opt/glassfish4/glassfish/domains/domain1/autodeploy/ROOT.war
 
-# Set environment variables for GlassFish
-ENV GLASSFISH_HOME=/opt/glassfish4
-ENV PATH=$GLASSFISH_HOME/bin:$PATH
+# Expose port 8080 (GlassFish default)
+EXPOSE 8080
 
-# Expose the default GlassFish ports (admin and HTTP)
-EXPOSE 8080 4848
-
-# Copy the WAR file to the GlassFish auto-deploy folder
-COPY ./STQA_Project/dist/STQA_Project.war $GLASSFISH_HOME/glassfish/domains/domain1/autodeploy/
-
-# Start GlassFish
-CMD ["asadmin", "start-domain", "--verbose", "domain1"]
+# Start GlassFish server
+CMD ["/opt/glassfish4/bin/asadmin", "start-domain", "--verbose", "domain1"]
