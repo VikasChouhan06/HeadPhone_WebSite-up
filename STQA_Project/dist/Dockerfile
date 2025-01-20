@@ -18,7 +18,7 @@ ENV PATH=$GLASSFISH_HOME/bin:$PATH
 EXPOSE 8080 4848
 
 # Copy the WAR file to the GlassFish auto-deploy folder
-COPY ./STQA_Project.war $GLASSFISH_HOME/glassfish/domains/domain1/autodeploy/
+COPY ./STQA_Project/dist/STQA_Project.war $GLASSFISH_HOME/glassfish/domains/domain1/autodeploy/
 
 # Start GlassFish
 CMD ["asadmin", "start-domain", "--verbose", "domain1"]
